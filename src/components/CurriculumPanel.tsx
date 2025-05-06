@@ -1,8 +1,11 @@
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import DayCard, { DayCardProps } from "./DayCard";
 import ProgressTracker from "./ProgressTracker";
+import EmptyState from "./EmptyState";
+import CompletedState from "./CompletedState";
+import { toast } from "@/components/ui/sonner";
 
 const initialCurriculumData: Omit<DayCardProps, 'onMarkComplete'>[] = [
   {
@@ -80,10 +83,18 @@ const CurriculumPanel: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState(initialCurriculumData);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [isGeneratedCurriculum, setIsGeneratedCurriculum] = useState(false);
   
   useEffect(() => {
     setHasAnimated(true);
   }, []);
+  
+  useEffect(() => {
+    // Check if all days are completed
+    if (completedDays.length > 0 && completedDays.length === curriculumData.length) {
+      toast.success("Congratulations! You've completed the entire curriculum! 🎉");
+    }
+  }, [completedDays, curriculumData.length]);
   
   const handleMarkComplete = (dayNumber: number) => {
     // Update the completed status of the day
@@ -101,9 +112,19 @@ const CurriculumPanel: React.FC = () => {
     
     if (isCompleted && !completedDays.includes(dayNumber)) {
       setCompletedDays([...completedDays, dayNumber]);
+      toast.success(`Day ${dayNumber} completed! 🎉`);
     } else if (!isCompleted) {
       setCompletedDays(completedDays.filter(day => day !== dayNumber));
     }
+  };
+  
+  const handleRestart = () => {
+    // Reset all progress
+    const resetData = curriculumData.map(day => ({ ...day, completed: false }));
+    setCurriculumData(resetData);
+    setCompletedDays([]);
+    setIsGeneratedCurriculum(false);
+    toast.success("Ready for a new learning journey! 💪");
   };
   
   // Animation variants for staggered animation
@@ -127,6 +148,16 @@ const CurriculumPanel: React.FC = () => {
     hidden: { opacity: 0, y: -20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
+  
+  // If no curriculum is generated yet
+  if (!isGeneratedCurriculum && completedDays.length === 0) {
+    return <EmptyState />;
+  }
+  
+  // If all days are completed
+  if (completedDays.length === curriculumData.length && completedDays.length > 0) {
+    return <CompletedState onRestart={handleRestart} />;
+  }
   
   return (
     <div className="h-full flex flex-col relative">

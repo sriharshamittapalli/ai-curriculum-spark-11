@@ -45,6 +45,23 @@
   body {
     @apply bg-white text-foreground font-sans;
   }
+  
+  /* Enhanced scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300;
+  }
 }
 
 @layer components {
@@ -108,5 +125,98 @@
   .pulse-slow {
     @apply animate-[pulse_3s_infinite];
   }
+  
+  /* Card update for premium feel */
+  .premium-card {
+    @apply rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  /* Gradient divider */
+  .gradient-divider {
+    @apply h-0.5 w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent my-4 rounded-full;
+  }
+  
+  /* Floating input style */
+  .floating-input {
+    @apply relative;
+  }
+  
+  .floating-input input:focus ~ label,
+  .floating-input input:not(:placeholder-shown) ~ label {
+    @apply transform -translate-y-5 scale-75 text-custom-blue;
+  }
+  
+  .floating-input label {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition-all pointer-events-none;
+  }
+  
+  /* Premium dropdown */
+  .dropdown-premium {
+    @apply rounded-full border-gray-200 bg-white focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
+  }
+  
+  /* Button pulse animation */
+  .btn-pulse {
+    @apply relative overflow-hidden;
+  }
+  
+  .btn-pulse::after {
+    @apply content-[''] absolute inset-0 bg-white/20 scale-x-0 opacity-0;
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(0);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+  
+  /* Checkmark animation */
+  @keyframes checkmark {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .animate-checkmark {
+    animation: checkmark 0.5s ease-in-out forwards;
+  }
+  
+  /* Completion badge */
+  .badge-completed {
+    @apply bg-green-50 text-green-600 border-green-100;
+    animation: slideIn 0.3s ease-out forwards;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Progress animation */
+  @keyframes progressFill {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(calc(-100% + var(--progress-width))); }
+  }
+  
+  .animate-progress {
+    animation: progressFill 0.6s ease-out forwards;
+  }
 }
-

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ const ResourceTypeIcon = ({ type }: { type: string }) => {
     case 'article':
       return <FileText className="h-3 w-3" />;
     case 'guide':
-      return <FileText className="h-3 w-3" />;
+      return <FileText className="h-3.5 w-3.5" />;
     case 'hands-on':
       return <BookOpen className="h-3 w-3" />;
     default:
@@ -74,7 +74,20 @@ const DayCard: React.FC<DayCardProps> = ({
   completed,
   onMarkComplete
 }) => {
-  const hoverScale = { scale: 1.01, transition: { type: "spring", stiffness: 300 } };
+  const [isCheckmarkAnimating, setIsCheckmarkAnimating] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  
+  const handleMarkComplete = () => {
+    if (!completed) {
+      setIsCheckmarkAnimating(true);
+      // Small delay to allow animation to play before state changes
+      setTimeout(() => {
+        onMarkComplete(dayNumber);
+      }, 300);
+    } else {
+      onMarkComplete(dayNumber);
+    }
+  };
   
   const badgeColors = [
     "bg-blue-100 text-blue-700",
@@ -85,14 +98,20 @@ const DayCard: React.FC<DayCardProps> = ({
   const badgeColor = badgeColors[(dayNumber - 1) % badgeColors.length];
   
   return (
-    <motion.div whileHover={hoverScale} className="will-change-transform">
-      <Card className={`border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm transition-all duration-300 ${
-        completed ? "shadow-md ring-1 ring-custom-blue/10" : ""
+    <motion.div 
+      whileHover={{ scale: 1.01, y: -4 }} 
+      transition={{ type: "spring", stiffness: 300 }} 
+      className="will-change-transform"
+      onHoverStart={() => setIsHovering(true)}
+      onHoverEnd={() => setIsHovering(false)}
+    >
+      <Card className={`premium-card overflow-hidden ${
+        completed ? "ring-1 ring-custom-blue/10 shadow-md" : ""
       }`}>
-        <CardHeader className="p-6 pb-4">
+        <CardHeader className="p-6 pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className={`w-11 h-11 rounded-full flex items-center justify-center ${
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                 completed 
                 ? "bg-custom-light-blue/10 text-custom-blue" 
                 : `${badgeColor}`
@@ -105,39 +124,58 @@ const DayCard: React.FC<DayCardProps> = ({
               </div>
             </div>
             {completed && (
-              <Badge variant="outline" className="bg-green-50 text-green-600 border-green-100 flex items-center gap-1">
-                <CheckCircle className="h-3 w-3" />
-                Completed
-              </Badge>
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ type: "spring" }}
+              >
+                <Badge variant="outline" className="badge-completed flex items-center gap-1 font-medium">
+                  <CheckCircle className="h-3 w-3" />
+                  Completed
+                </Badge>
+              </motion.div>
             )}
           </div>
         </CardHeader>
         <CardContent className="px-6 space-y-5">
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <span className="w-1 h-5 bg-blue-500 rounded-full"></span>
+              <span className="w-1 h-5 rounded-full" style={{background: "linear-gradient(to bottom, #3b82f6, #60a5fa)"}}></span>
               Objectives
             </h4>
             <ul className="space-y-2.5">
               {objectives.map((objective, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
+                <motion.li 
+                  key={index} 
+                  className="flex items-start gap-2 text-sm text-gray-700"
+                  initial={false}
+                  animate={isHovering ? { x: 3 } : { x: 0 }}
+                  transition={{ type: "spring", stiffness: 300, delay: index * 0.05 }}
+                >
                   <span className="mt-0.5 text-custom-light-blue bg-blue-50 p-0.5 rounded-full">
                     <Check className="h-3 w-3" />
                   </span>
                   <span>{objective}</span>
-                </li>
+                </motion.li>
               ))}
             </ul>
           </div>
           
+          <div className="gradient-divider"></div>
+          
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <span className="w-1 h-5 bg-purple-500 rounded-full"></span>
+              <span className="w-1 h-5 rounded-full" style={{background: "linear-gradient(to bottom, #8b5cf6, #a78bfa)"}}></span>
               Resources
             </h4>
             <ul className="space-y-2">
               {resources.map((resource, index) => (
-                <li key={index} className="p-3 rounded-lg border border-gray-100 bg-gray-50 hover:bg-white hover:border-gray-200 transition-colors">
+                <motion.li 
+                  key={index} 
+                  className="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:border-gray-200 transition-all hover:shadow-md"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <div className="flex items-center gap-2.5">
                     <ResourceTypeBadge type={resource.type} />
                     <a 
@@ -152,37 +190,55 @@ const DayCard: React.FC<DayCardProps> = ({
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
                     </div>
                   </div>
-                </li>
+                </motion.li>
               ))}
             </ul>
           </div>
           
+          <div className="gradient-divider"></div>
+          
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-              <span className="w-1 h-5 bg-green-500 rounded-full"></span>
+              <span className="w-1 h-5 rounded-full" style={{background: "linear-gradient(to bottom, #22c55e, #4ade80)"}}></span>
               Assignment
             </h4>
-            <div className="text-sm text-gray-700 p-4 bg-green-50 rounded-lg border border-green-100">
+            <motion.div 
+              className="text-sm text-gray-700 p-4 bg-green-50 rounded-xl border border-green-100"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               {assignment}
-            </div>
+            </motion.div>
           </div>
         </CardContent>
         <CardFooter className="p-6 pt-2">
           <Button 
-            onClick={() => onMarkComplete(dayNumber)}
+            onClick={handleMarkComplete}
             variant={completed ? "outline" : "default"}
             size="sm"
             className={completed 
               ? "w-full border-green-200 text-green-600 hover:bg-green-50 rounded-xl py-5" 
-              : "w-full bg-gradient-to-r from-custom-blue to-custom-light-blue hover:opacity-90 text-white shadow-md rounded-xl py-5"
+              : "w-full bg-gradient-to-r from-custom-blue to-custom-light-blue hover:opacity-90 text-white shadow-md hover:shadow-lg rounded-xl py-5 group"
             }
           >
-            {completed ? (
+            {isCheckmarkAnimating && !completed ? (
+              <span className="animate-checkmark">
+                <CheckCircle className="h-5 w-5 mx-auto" />
+              </span>
+            ) : completed ? (
               <span className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4" />
                 Completed
               </span>
-            ) : "Mark as Complete"}
+            ) : (
+              <span className="group-hover:scale-105 transition-transform">Mark as Complete</span>
+            )}
+            
+            {!completed && (
+              <span className="absolute inset-0 rounded-xl overflow-hidden">
+                <span className="absolute inset-0 bg-white/20 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+              </span>
+            )}
           </Button>
         </CardFooter>
       </Card>

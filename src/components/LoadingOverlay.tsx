@@ -16,9 +16,19 @@ const LoadingOverlay: React.FC = () => {
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
         
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-10 h-10 rounded-full bg-custom-light-blue animate-pulse"></div>
-        </div>
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center"
+          animate={{ 
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <div className="w-10 h-10 rounded-full bg-custom-light-blue"></div>
+        </motion.div>
       </div>
       
       <motion.div
@@ -37,6 +47,30 @@ const LoadingOverlay: React.FC = () => {
         transition={{ delay: 0.5 }}
       >
         Our AI is crafting a tailored learning path just for you, analyzing the best resources and optimal learning sequence...
+      </motion.div>
+      
+      <motion.div
+        className="mt-6 flex space-x-1.5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+      >
+        {[0, 1, 2].map((dot) => (
+          <motion.div
+            key={dot}
+            className="w-2.5 h-2.5 rounded-full bg-custom-blue"
+            animate={{ 
+              y: [0, -6, 0],
+            }}
+            transition={{
+              duration: 0.6,
+              repeat: Infinity,
+              repeatType: "loop",
+              ease: "easeInOut",
+              delay: dot * 0.2
+            }}
+          />
+        ))}
       </motion.div>
     </motion.div>
   );
