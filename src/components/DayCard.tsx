@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -211,10 +210,10 @@ const DayCard: React.FC<DayCardProps> = ({
             onClick={handleMarkComplete}
             variant={completed ? "outline" : "default"}
             size="sm"
-            className={completed 
-              ? "w-full border-green-200 text-green-600 hover:bg-green-50 rounded-xl py-5" 
-              : "w-full bg-gradient-to-r from-custom-blue to-custom-light-blue hover:opacity-90 text-white shadow-md hover:shadow-lg rounded-xl py-5 group"
-            }
+            className={`w-full ${completed 
+              ? "border-green-200 text-green-600 hover:bg-green-50 rounded-xl py-5" 
+              : "bg-gradient-to-r from-custom-blue to-custom-light-blue hover:opacity-90 text-white shadow-md hover:shadow-lg rounded-xl py-5 group"
+            } transition-all duration-200`}
           >
             <AnimatePresence mode="wait">
               {isCheckmarkAnimating && !completed ? (
@@ -248,7 +247,7 @@ const DayCard: React.FC<DayCardProps> = ({
             </AnimatePresence>
             
             {!completed && (
-              <span className="absolute inset-0 rounded-xl overflow-hidden">
+              <span className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
                 <span className="absolute inset-0 bg-white/20 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
               </span>
             )}

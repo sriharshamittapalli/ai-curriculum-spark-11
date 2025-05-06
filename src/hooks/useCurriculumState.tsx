@@ -43,33 +43,51 @@ export function useCurriculumState() {
   };
 
   const handleMarkComplete = (dayNumber: number) => {
-    // Update the completed status of the day
-    const updatedCurriculumData = curriculumData.map(day => {
-      if (day.dayNumber === dayNumber) {
-        return { ...day, completed: !day.completed };
-      }
-      return day;
+    // Use a callback to ensure we're working with the latest state
+    setCurriculumData(prevData => {
+      return prevData.map(day => {
+        if (day.dayNumber === dayNumber) {
+          return { ...day, completed: !day.completed };
+        }
+        return day;
+      });
     });
     
-    setCurriculumData(updatedCurriculumData);
-    
-    // Update the completed days array
-    const isCompleted = updatedCurriculumData.find(day => day.dayNumber === dayNumber)?.completed;
-    
-    if (isCompleted && !completedDays.includes(dayNumber)) {
-      setCompletedDays([...completedDays, dayNumber]);
-      toast.success(`Day ${dayNumber} completed! 🎉`);
-    } else if (!isCompleted) {
-      setCompletedDays(completedDays.filter(day => day !== dayNumber));
-    }
+    // Also use a callback for the completedDays array
+    setCompletedDays(prevCompletedDays => {
+      const dayIndex = prevCompletedDays.indexOf(dayNumber);
+      if (dayIndex === -1) {
+        // Day wasn't completed before, so add it
+        const newCompletedDays = [...prevCompletedDays, dayNumber];
+        
+        // Only show toast for the first few completions to avoid spam
+        if (prevCompletedDays.length < 3) {
+          setTimeout(() => {
+            toast.success(`Day ${dayNumber} completed! 🎉`);
+          }, 300);
+        } else if (prevCompletedDays.length === 3) {
+          setTimeout(() => {
+            toast.success(`Multiple days completed! Great progress! 🎉`);
+          }, 300);
+        }
+        
+        return newCompletedDays;
+      } else {
+        // Day was already completed, so remove it
+        return prevCompletedDays.filter(d => d !== dayNumber);
+      }
+    });
   };
   
   const handleRestart = () => {
-    // Reset all progress
-    const resetData = curriculumData.map(day => ({ ...day, completed: false }));
-    setCurriculumData(resetData);
-    setCompletedDays([]);
-    toast.success("Ready for a new learning journey! 💪");
+    // Reset all progress with smoother animation
+    setTimeout(() => {
+      setCurriculumData(prevData => 
+        prevData.map(day => ({ ...day, completed: false }))
+      );
+      setCompletedDays([]);
+      toast.success("Ready for a new learning journey! 💪");
+    }, 200);
   };
 
   return {

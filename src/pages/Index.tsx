@@ -55,18 +55,39 @@ const Index: React.FC = () => {
       opacity: 1,
       transition: { 
         duration: 0.5,
-        staggerChildren: 0.1
+        staggerChildren: 0.05
       }
     }
   };
 
   // Variants for child elements
   const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.3 }
+    }
+  };
+
+  // Mobile tab switching animations
+  const mobileTabVariants = {
+    inactive: { scale: 1 },
+    active: { scale: 1.05, transition: { type: "spring", stiffness: 500, damping: 15 } }
+  };
+
+  // Content switching animations
+  const contentVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4 }
+      transition: { type: "spring", stiffness: 300, damping: 20 }
+    },
+    exit: {
+      opacity: 0, 
+      y: -20,
+      transition: { duration: 0.2 }
     }
   };
 
@@ -98,6 +119,8 @@ const Index: React.FC = () => {
                   className={`px-4 py-2 text-sm rounded-full transition-all relative ${showMobileSettings ? 'text-white' : 'text-gray-500'}`}
                   onClick={() => setShowMobileSettings(true)}
                   whileTap={{ scale: 0.95 }}
+                  variants={mobileTabVariants}
+                  animate={showMobileSettings ? "active" : "inactive"}
                   layout
                 >
                   {showMobileSettings && (
@@ -113,6 +136,8 @@ const Index: React.FC = () => {
                   className={`px-4 py-2 text-sm rounded-full transition-all relative ${!showMobileSettings ? 'text-white' : 'text-gray-500'}`}
                   onClick={() => setShowMobileSettings(false)}
                   whileTap={{ scale: 0.95 }}
+                  variants={mobileTabVariants}
+                  animate={!showMobileSettings ? "active" : "inactive"}
                   layout
                 >
                   {!showMobileSettings && (
@@ -133,12 +158,11 @@ const Index: React.FC = () => {
             {(!isMobile || (isMobile && showMobileSettings)) && (
               <motion.div 
                 className="w-full lg:w-2/5"
-                variants={itemVariants}
                 key="settings"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.3 }}
+                variants={contentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 layout
               >
                 <SettingsPanel onGenerateCurriculum={handleGenerateCurriculum} />
@@ -151,12 +175,11 @@ const Index: React.FC = () => {
             {(!isMobile || (isMobile && !showMobileSettings)) && (
               <motion.div 
                 className="w-full lg:w-3/5"
-                variants={itemVariants}
                 key="curriculum"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.3 }}
+                variants={contentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 layout
               >
                 <CurriculumPanel 
@@ -210,7 +233,7 @@ const Index: React.FC = () => {
         <AnimatePresence>
           {isMobile && showMobileSettings && !isGenerated && (
             <motion.div 
-              className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-lg"
+              className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-lg z-20"
               initial={{ y: 100 }}
               animate={{ y: 0 }}
               exit={{ y: 100 }}

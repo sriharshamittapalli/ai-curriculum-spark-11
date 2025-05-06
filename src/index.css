@@ -104,27 +104,32 @@
   .gradient-divider {
     @apply h-0.5 w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent my-4 rounded-full;
   }
-  
-  /* Floating label inputs */
-  .floating-input {
-    @apply relative;
-  }
-  
-  .floating-input input:focus ~ label,
-  .floating-input input:not(:placeholder-shown) ~ label {
-    @apply transform -translate-y-5 scale-75 text-custom-blue;
-  }
-  
-  .floating-input label {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition-all pointer-events-none;
-  }
-  
+
   /* Completion badge */
   .badge-completed {
     @apply bg-green-50 text-green-600 border-green-100;
     animation: slideIn 0.3s ease-out forwards;
   }
   
+  /* Select dropdown styles to fix visibility */
+  [data-state=open] [data-radix-select-item] {
+    @apply bg-gray-100 text-gray-800;
+  }
+  
+  [data-radix-select-item]:hover {
+    @apply bg-gray-100 text-gray-800;
+  }
+  
+  [data-radix-select-item]:focus {
+    @apply bg-blue-50 text-blue-600 outline-none;
+  }
+
+  /* Fix for dropdown menu items */
+  [data-radix-select-viewport] {
+    @apply bg-white text-gray-800;
+  }
+
+  /* Improved animation keyframes for smoother animations */
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -134,5 +139,18 @@
       opacity: 1;
       transform: translateX(0);
     }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
