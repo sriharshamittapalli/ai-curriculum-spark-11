@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# AI Curriculum Builder
 
-## Project info
+A modern web application that helps users design customized learning journeys for AI and machine learning topics.
 
-**URL**: https://lovable.dev/projects/13c34ac5-7567-432a-958d-6bc595c75a04
+## Project Structure
 
-## How can I edit this code?
+This project is designed with a clear separation between frontend and backend:
 
-There are several ways of editing your application.
+### Frontend
+The frontend is a React application built with:
+- TypeScript
+- React
+- Tailwind CSS
+- shadcn-ui components
+- Framer Motion for animations
 
-**Use Lovable**
+The frontend allows users to:
+- Select learning topics, pace, and style preferences
+- Generate personalized curriculum plans
+- Track progress through the learning plan
+- Mark lessons as complete
+- View information in a beautiful and intuitive UI
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/13c34ac5-7567-432a-958d-6bc595c75a04) and start prompting.
+### Backend (Coming Soon)
+The backend will be implemented separately and will include:
+- API endpoints for curriculum generation
+- User authentication and profiles
+- Progress tracking
+- Content management
 
-Changes made via Lovable will be committed automatically to this repo.
+## Getting Started
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v16+)
+- npm or yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the project directory
+cd ai-curriculum-spark-11
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install the necessary dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Development
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Frontend Development
+The frontend is structured as follows:
+- `/src/components` - Reusable UI components
+- `/src/pages` - Page components and layouts
+- `/src/hooks` - Custom React hooks
+- `/src/lib` - Utility functions and shared logic
+- `/src/types` - TypeScript type definitions
 
-**Use GitHub Codespaces**
+### Design Decisions
+- Modern, clean UI with a focus on usability
+- Responsive design that works on mobile and desktop
+- Consistent use of color, typography and spacing
+- Smooth animations for a premium feel
+- Hidden scrollbars for a cleaner appearance while maintaining functionality
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/13c34ac5-7567-432a-958d-6bc595c75a04) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Technologies
+- Vite - Fast build tool
+- TypeScript - Type-safe code
+- React - UI library
+- shadcn-ui - Component library
+- Tailwind CSS - Utility-first CSS framework
+- Framer Motion - Animation library

@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 217 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+    
+    /* Custom colors */
+    --custom-blue: #3498db;  /* Blue-500 */
+    --custom-light-blue: #68b3c8; /* Blue-400 */
+    --custom-dark-blue: #2c6dbf; /* Blue-600 */
+    --custom-purple: #7a49a5; /* Purple-500 */
+    --custom-green: #34c759; /* Green-500 */
+    --custom-red: #e53e3e; /* Red-500 */
+    --custom-amber: #ffc107; /* Amber-500 */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-foreground font-sans overflow-x-hidden;
+  }
+  
+  /* Enhanced scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+@layer components {
+  /* Glass effect cards */
+  .glass-card {
+    @apply bg-opacity-95 backdrop-filter backdrop-blur-sm bg-white border border-white/20 rounded-2xl shadow-lg;
+  }
+  
+  /* Blue gradient background */
+  .blue-gradient-bg {
+    @apply bg-gradient-to-br from-blue-500 to-purple-500;
+  }
+  
+  /* Hide scrollbar but maintain functionality */
+  .scrollbar-hide, .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar, 
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+
+  /* Custom scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+  }
+
+  /* Custom scrollbar styling for sidebar */
+  .sidebar-with-scrollbar {
+    overflow-y: auto !important;
+  }
+  
+  .sidebar-with-scrollbar::-webkit-scrollbar {
+    width: 10px !important;
+  }
+  
+  .sidebar-with-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+  }
+  
+  .sidebar-with-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1 !important;
+    border-radius: 5px !important;
+  }
+  
+  .sidebar-with-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0 !important;
+  }
+
+  /* Gradient button */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-blue-500 via-light-blue-400 to-purple-500 text-white transition-all shadow-lg hover:shadow-xl hover:opacity-90;
+  }
+
+  /* Card with hover effects */
+  .interactive-card {
+    @apply transition-all duration-300 hover:shadow-lg hover:border-blue-500/30;
+  }
+  
+  /* Premium card styling */
+  .premium-card {
+    @apply rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  /* Gradient divider */
+  .gradient-divider {
+    @apply h-0.5 w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent my-4 rounded-full;
+  }
+
+  /* Completion badge */
+  .badge-completed {
+    @apply bg-green-50 text-green-600 border-green-100;
+    animation: slideIn 0.3s ease-out forwards;
+  }
+  
+  /* Select dropdown styles to fix visibility */
+  [data-state=open] [data-radix-select-item] {
+    @apply bg-gray-50 text-gray-800;
+  }
+  
+  [data-radix-select-item]:hover {
+    @apply bg-gray-50 text-gray-800;
+  }
+  
+  [data-radix-select-item]:focus {
+    @apply bg-blue-50 text-blue-700 outline-none;
+  }
+
+  /* Fix for dropdown menu items */
+  [data-radix-select-viewport] {
+    @apply bg-white text-gray-800;
+  }
+
+  /* Improved animation keyframes for smoother animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Fix for making selects and dropdowns visible */
+  .radix-select-viewport,
+  .select-content,
+  [data-radix-select-item] {
+    @apply bg-white text-gray-800;
+  }
+  
+  .radix-select-item[data-highlighted],
+  .select-item[data-highlighted] {
+    @apply bg-blue-50 text-blue-700;
+  }
+  
+  /* Fix for button animations */
+  .btn-animate {
+    @apply relative overflow-hidden;
+  }
+  
+  .btn-animate::after {
+    content: '';
+    @apply absolute inset-0 bg-white/10 transform translate-y-full transition-transform duration-300;
+  }
+  
+  .btn-animate:hover::after {
+    @apply translate-y-0;
+  }
+  
+  /* Sticky headers */
+  .sticky-header {
+    @apply sticky top-0 z-30 bg-white/90 backdrop-blur-sm;
+  }
+  
+  /* Fixed form container */
+  .fixed-form-container {
+    @apply sticky top-0 max-h-screen overflow-auto;
+  }
+}
