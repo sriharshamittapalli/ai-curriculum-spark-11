@@ -3,23 +3,23 @@ import React, { useState, useEffect } from "react";
 import SettingsPanel from "@/components/SettingsPanel";
 import CurriculumPanel from "@/components/CurriculumPanel";
 import { toast } from "@/components/ui/sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import { z } from "zod";
-
-// Define the form schema
-const formSchema = z.object({
-  topic: z.string(),
-  learningPace: z.string(),
-  preferredStyles: z.array(z.string()),
-  learningDepth: z.enum(["beginner", "intermediate", "advanced"]),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { FormValues } from "@/lib/schema";
+import { useCurriculumState } from "@/hooks/useCurriculumState";
 
 const Index: React.FC = () => {
-  const [curriculumGenerated, setCurriculumGenerated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    curriculumData,
+    completedDays,
+    isLoading,
+    isGenerated,
+    currentTopic,
+    generateCurriculumFromForm,
+    handleMarkComplete,
+    handleRestart
+  } = useCurriculumState();
+  
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileSettings, setShowMobileSettings] = useState(true);
 
@@ -37,28 +37,22 @@ const Index: React.FC = () => {
     };
   }, []);
 
-  const handleGenerateCurriculum = (formValues: FormValues) => {
-    setIsLoading(true);
-    
-    // Log the form values
-    console.log("Form values:", formValues);
-    
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Curriculum generated successfully!");
-      setCurriculumGenerated(true);
-      setIsLoading(false);
-      
-      // On mobile, switch to curriculum view after generating
-      if (isMobile) {
-        setShowMobileSettings(false);
-      }
-    }, 2500);
+  useEffect(() => {
+    // When curriculum is generated, switch to curriculum view on mobile
+    if (isGenerated && isMobile) {
+      setShowMobileSettings(false);
+    }
+  }, [isGenerated, isMobile]);
+
+  const handleGenerateCurriculum = (formData: FormValues) => {
+    generateCurriculumFromForm(formData);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 py-8 px-4 md:px-8 overflow-hidden relative">
-      {isLoading && <LoadingOverlay />}
+      <AnimatePresence>
+        {isLoading && <LoadingOverlay />}
+      </AnimatePresence>
       
       <motion.div 
         className="container mx-auto"
@@ -68,7 +62,7 @@ const Index: React.FC = () => {
       >
         <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
           {/* Mobile Toggle Button */}
-          {isMobile && curriculumGenerated && (
+          {isMobile && isGenerated && (
             <motion.div 
               className="flex justify-center mb-4"
               initial={{ opacity: 0 }}
@@ -99,6 +93,7 @@ const Index: React.FC = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
               key="settings"
+              layout
             >
               <SettingsPanel onGenerateCurriculum={handleGenerateCurriculum} />
             </motion.div>
@@ -112,8 +107,16 @@ const Index: React.FC = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               key="curriculum"
+              layout
             >
-              <CurriculumPanel />
+              <CurriculumPanel 
+                data={curriculumData}
+                completedDays={completedDays}
+                onMarkComplete={handleMarkComplete}
+                onRestart={handleRestart}
+                isGenerated={isGenerated}
+                currentTopic={currentTopic}
+              />
             </motion.div>
           )}
         </div>
@@ -139,8 +142,8 @@ const Index: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Mobile Bottom CTA */}
-        {isMobile && showMobileSettings && !curriculumGenerated && (
+        {/* Mobile Bottom CTA - Only show when on settings panel and no curriculum is generated yet */}
+        {isMobile && showMobileSettings && !isGenerated && (
           <motion.div 
             className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-lg"
             initial={{ y: 100 }}
@@ -149,32 +152,12 @@ const Index: React.FC = () => {
           >
             <button 
               onClick={() => {
-                // This is just for mobile view demo purposes
-                setIsLoading(true);
-                setTimeout(() => {
-                  toast.success("Curriculum generated successfully!");
-                  setCurriculumGenerated(true);
-                  setIsLoading(false);
-                  setShowMobileSettings(false);
-                }, 2500);
+                toast.info("Please fill out the form above to generate a curriculum.");
               }}
-              disabled={isLoading}
               className="w-full bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple hover:opacity-90 text-white shadow-lg py-4 rounded-xl relative overflow-hidden flex items-center justify-center gap-2"
             >
-              {isLoading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                  Generate Curriculum
-                </>
-              )}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              Generate Curriculum
             </button>
           </motion.div>
         )}

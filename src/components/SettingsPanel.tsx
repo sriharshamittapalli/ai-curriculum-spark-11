@@ -1,29 +1,18 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { motion } from "framer-motion";
-import { BookOpen, Video, FileText, Sparkles } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { BookOpen, Video, FileText, Sparkles, PlusCircle } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-
-// Define validation schema
-const formSchema = z.object({
-  topic: z.string({ required_error: "Topic is required" }),
-  learningPace: z.string({ required_error: "Learning pace is required" }),
-  preferredStyles: z.array(z.string()).min(1, "Select at least one learning style"),
-  learningDepth: z.enum(["beginner", "intermediate", "advanced"], {
-    required_error: "Learning depth is required"
-  }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { formSchema, FormValues } from "@/lib/schema";
 
 interface SettingsPanelProps {
   onGenerateCurriculum: (formData: FormValues) => void;
@@ -32,16 +21,8 @@ interface SettingsPanelProps {
 const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onGenerateCurriculum
 }) => {
-  const topics = [
-    "Machine Learning",
-    "Web Development",
-    "Data Science",
-    "Mobile Development",
-    "Blockchain",
-    "UI/UX Design"
-  ];
-  
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showCustomTopicInput, setShowCustomTopicInput] = useState(false);
   
   // Initialize form with validation schema
   const form = useForm<FormValues>({
@@ -53,6 +34,20 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       learningDepth: "beginner",
     },
   });
+
+  // Pre-defined topics
+  const topics = [
+    "Machine Learning",
+    "Web Development",
+    "Data Science",
+    "Mobile Development",
+    "Blockchain",
+    "UI/UX Design",
+    "JavaScript",
+    "Python",
+    "Cloud Computing",
+    "DevOps",
+  ];
   
   const handleSubmit = (values: FormValues) => {
     setIsGenerating(true);
@@ -64,6 +59,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     setTimeout(() => {
       setIsGenerating(false);
     }, 3000);
+  };
+
+  const handleCustomTopic = () => {
+    setShowCustomTopicInput(true);
+    // Clear any previous selection
+    form.setValue("topic", "");
+  };
+
+  // For handling the custom topic input
+  const handleCustomTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Convert input to kebab-case
+    const value = e.target.value.toLowerCase().replace(/\s+/g, '-');
+    form.setValue("topic", value);
   };
 
   return (
@@ -112,38 +120,69 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     Topic
                     <span className="bg-blue-50 text-blue-700 text-xs px-1.5 py-0.5 rounded-full">Required</span>
                   </Label>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="w-full border-gray-200 bg-white rounded-full px-4 py-2 h-12 text-gray-700 hover:border-custom-blue/70 transition-all shadow-sm hover:shadow focus:ring-custom-light-blue/30 focus:border-custom-blue">
-                        <SelectValue placeholder="Select a topic" className="text-gray-500" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white rounded-xl border border-gray-100 shadow-lg">
-                      {topics.map((topic, index) => (
-                        <SelectItem 
-                          key={topic} 
-                          value={topic.toLowerCase().replace(/\s+/g, '-')}
-                          className="hover:bg-gray-50 cursor-pointer py-2 px-2 rounded-md focus:bg-gray-50 text-gray-700"
-                        >
-                          <div className="flex items-center gap-2">
-                            <motion.div 
-                              className={`w-2 h-2 rounded-full ${[
-                                'bg-blue-500',
-                                'bg-green-500',
-                                'bg-purple-500',
-                                'bg-orange-500',
-                                'bg-pink-500',
-                                'bg-teal-500',
-                              ][index % 6]}`}
-                              initial={false}
-                              whileHover={{ scale: 1.5 }}
-                            ></motion.div>
-                            {topic}
+                  
+                  {showCustomTopicInput ? (
+                    <div className="relative">
+                      <FormControl>
+                        <Input 
+                          placeholder="Enter a custom topic"
+                          className="w-full border-gray-200 bg-white rounded-full px-4 py-2 h-12 text-gray-700 hover:border-custom-blue/70 transition-all shadow-sm hover:shadow focus:ring-custom-light-blue/30 focus:border-custom-blue"
+                          onChange={handleCustomTopicChange}
+                        />
+                      </FormControl>
+                      <Button 
+                        type="button" 
+                        variant="ghost" 
+                        size="sm" 
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-500"
+                        onClick={() => setShowCustomTopicInput(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full border-gray-200 bg-white rounded-full px-4 py-2 h-12 text-gray-700 hover:border-custom-blue/70 transition-all shadow-sm hover:shadow focus:ring-custom-light-blue/30 focus:border-custom-blue">
+                            <SelectValue placeholder="Select a topic" className="text-gray-500" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white rounded-xl border border-gray-100 shadow-lg max-h-[300px]">
+                          {topics.map((topic, index) => (
+                            <SelectItem 
+                              key={topic} 
+                              value={topic.toLowerCase().replace(/\s+/g, '-')}
+                              className="hover:bg-gray-50 cursor-pointer py-2 px-2 rounded-md focus:bg-gray-50 text-gray-700"
+                            >
+                              <div className="flex items-center gap-2">
+                                <motion.div 
+                                  className={`w-2 h-2 rounded-full ${[
+                                    'bg-blue-500',
+                                    'bg-green-500',
+                                    'bg-purple-500',
+                                    'bg-orange-500',
+                                    'bg-pink-500',
+                                    'bg-teal-500',
+                                  ][index % 6]}`}
+                                  initial={false}
+                                  whileHover={{ scale: 1.5 }}
+                                ></motion.div>
+                                {topic}
+                              </div>
+                            </SelectItem>
+                          ))}
+                          <div 
+                            className="mt-1 px-2 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 border-t border-gray-100 text-custom-blue"
+                            onClick={handleCustomTopic}
+                          >
+                            <PlusCircle className="h-4 w-4" />
+                            <span>Add custom topic</span>
                           </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
                   <FormMessage className="text-red-500 text-xs mt-1" />
                 </FormItem>
               )}
@@ -166,7 +205,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     Learning Pace
                     <span className="bg-blue-50 text-blue-700 text-xs px-1.5 py-0.5 rounded-full">Required</span>
                   </Label>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full border-gray-200 bg-white rounded-full px-4 py-2 h-12 text-gray-700 hover:border-custom-blue/70 transition-all shadow-sm hover:shadow focus:ring-custom-light-blue/30 focus:border-custom-blue">
                         <SelectValue placeholder="Select pace" className="text-gray-500" />
@@ -176,19 +215,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       <SelectItem value="slow" className="hover:bg-gray-50 cursor-pointer py-2 px-2 rounded-md focus:bg-gray-50 text-gray-700">
                         <div className="flex items-center gap-2">
                           <div className="w-6 text-blue-500">🐢</div>
-                          Slow & Steady
+                          Slow & Steady (7 days)
                         </div>
                       </SelectItem>
                       <SelectItem value="normal" className="hover:bg-gray-50 cursor-pointer py-2 px-2 rounded-md focus:bg-gray-50 text-gray-700">
                         <div className="flex items-center gap-2">
                           <div className="w-6 text-purple-500">⚡</div>
-                          Normal Pace
+                          Normal Pace (5 days)
                         </div>
                       </SelectItem>
                       <SelectItem value="fast" className="hover:bg-gray-50 cursor-pointer py-2 px-2 rounded-md focus:bg-gray-50 text-gray-700">
                         <div className="flex items-center gap-2">
                           <div className="w-6 text-orange-500">🚀</div>
-                          Fast Track
+                          Fast Track (3 days)
                         </div>
                       </SelectItem>
                     </SelectContent>
@@ -274,7 +313,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <FormControl>
                     <RadioGroup 
                       onValueChange={field.onChange} 
-                      defaultValue={field.value} 
+                      value={field.value} 
                       className="space-y-2"
                     >
                       <motion.div 

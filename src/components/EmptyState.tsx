@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
 
 const EmptyState: React.FC = () => {
+  // Animation for the hint arrow
+  const arrowVariants = {
+    idle: { x: 0 },
+    active: { x: 10 }
+  };
+
   return (
     <motion.div 
       className="flex flex-col items-center justify-center p-12 h-full rounded-3xl border border-gray-100 bg-white/90 backdrop-blur-sm shadow-md"
@@ -48,15 +54,45 @@ const EmptyState: React.FC = () => {
       </motion.p>
       
       <motion.div
-        className="flex items-center text-custom-blue text-sm font-medium cursor-pointer"
+        className="flex items-center text-custom-blue text-sm font-medium cursor-pointer group"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4 }}
-        whileHover={{ scale: 1.05 }}
+        whileHover="active"
+        initial="idle"
       >
         <Sparkles className="w-4 h-4 mr-2" />
-        <span>Configure your learning preferences</span>
-        <ArrowRight className="ml-1 w-4 h-4" />
+        <span className="group-hover:underline">Configure your learning preferences</span>
+        <motion.div
+          variants={arrowVariants}
+          transition={{ type: "spring", stiffness: 400 }}
+        >
+          <ArrowRight className="ml-1 w-4 h-4" />
+        </motion.div>
+      </motion.div>
+
+      {/* Help tips */}
+      <motion.div
+        className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <motion.div 
+          className="p-3 rounded-xl bg-blue-50/50 border border-blue-100 text-sm"
+          whileHover={{ y: -4, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
+        >
+          <p className="text-blue-700 font-medium mb-1">Choose a topic</p>
+          <p className="text-blue-600 text-xs">Select from popular subjects or add your own custom topic</p>
+        </motion.div>
+        
+        <motion.div 
+          className="p-3 rounded-xl bg-purple-50/50 border border-purple-100 text-sm"
+          whileHover={{ y: -4, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
+        >
+          <p className="text-purple-700 font-medium mb-1">Set your pace</p>
+          <p className="text-purple-600 text-xs">Choose how quickly you want to progress through the material</p>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
