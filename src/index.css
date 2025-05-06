@@ -64,4 +64,34 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Custom button styles */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple text-white transition-all shadow-lg hover:shadow-xl hover:opacity-90;
+  }
+
+  /* Interactive card styles */
+  .interactive-card {
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-custom-blue/10 hover:border-custom-blue/30;
+  }
+  
+  /* Soft hover effects */
+  .soft-hover {
+    @apply transition-all hover:bg-white/5;
+  }
+
+  /* Enhanced form elements */
+  .form-input-enhanced {
+    @apply glass-card border-custom-blue/20 focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
+  }
+  
+  /* Badge styles */
+  .badge-premium {
+    @apply bg-gradient-to-r from-custom-blue/20 to-custom-purple/20 text-white border border-white/10;
+  }
+  
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-gradient-to-r from-custom-light-blue to-custom-purple bg-clip-text text-transparent;
+  }
 }

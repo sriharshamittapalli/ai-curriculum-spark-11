@@ -1,5 +1,6 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import DayCard, { DayCardProps } from "./DayCard";
 import ProgressTracker from "./ProgressTracker";
 
@@ -100,26 +101,48 @@ const CurriculumPanel: React.FC = () => {
     }
   };
   
+  // Animation variants for staggered animation
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  };
+  
   return (
     <div className="h-full flex flex-col">
-      <div className="glass-card p-6 mb-4">
+      <div className="glass-card p-6 mb-4 border border-white/10">
         <h2 className="text-2xl font-semibold mb-2 text-white">Your Personalized Curriculum</h2>
         <p className="text-sm text-white/70">Machine Learning for Beginners - 3 day curriculum</p>
       </div>
       
       <ProgressTracker totalDays={curriculumData.length} completedDays={completedDays} />
       
-      <div className="flex-grow overflow-auto scrollbar-hide pr-2">
+      <motion.div 
+        className="flex-grow overflow-auto scrollbar-hide pr-2"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         <div className="space-y-4">
           {curriculumData.map((day) => (
-            <DayCard 
-              key={day.dayNumber}
-              {...day}
-              onMarkComplete={handleMarkComplete}
-            />
+            <motion.div key={day.dayNumber} variants={itemVariants}>
+              <DayCard 
+                {...day}
+                onMarkComplete={handleMarkComplete}
+              />
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
