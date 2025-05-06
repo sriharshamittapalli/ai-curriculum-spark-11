@@ -59,7 +59,6 @@ const EmptyState: React.FC = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4 }}
         whileHover="active"
-        initial="idle"
       >
         <Sparkles className="w-4 h-4 mr-2" />
         <span className="group-hover:underline">Configure your learning preferences</span>

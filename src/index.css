@@ -65,14 +65,17 @@
 }
 
 @layer components {
+  /* Glass effect cards */
   .glass-card {
     @apply bg-opacity-95 backdrop-filter backdrop-blur-sm bg-white border border-white/20 rounded-2xl shadow-lg;
   }
   
+  /* Blue gradient background */
   .blue-gradient-bg {
     @apply bg-gradient-to-br from-custom-blue to-custom-purple;
   }
   
+  /* Hide scrollbar but maintain functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -82,51 +85,27 @@
     display: none;
   }
 
-  /* Custom button styles */
+  /* Gradient button */
   .btn-gradient {
     @apply bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple text-white transition-all shadow-lg hover:shadow-xl hover:opacity-90;
   }
 
-  /* Interactive card styles */
+  /* Card with hover effects */
   .interactive-card {
     @apply transition-all duration-300 hover:shadow-lg hover:border-custom-blue/30;
   }
   
-  /* Soft hover effects */
-  .soft-hover {
-    @apply transition-all hover:bg-white/5;
-  }
-
-  /* Enhanced form elements */
-  .form-input-enhanced {
-    @apply bg-white/95 border-gray-200 focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
-  }
-  
-  /* Badge styles */
-  .badge-premium {
-    @apply bg-gradient-to-r from-custom-blue/20 to-custom-purple/20 text-custom-blue border border-custom-blue/10;
-  }
-  
-  /* Text gradient */
-  .text-gradient {
-    @apply bg-gradient-to-r from-custom-light-blue to-custom-purple bg-clip-text text-transparent;
-  }
-
-  /* Glassmorphism */
-  .glass-morphism {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
-  }
-
-  /* Animations */
+  /* Hover effect for elements */
   .hover-lift {
     @apply transition-transform hover:-translate-y-1 hover:shadow-lg;
   }
 
+  /* Slow pulse animation */
   .pulse-slow {
     @apply animate-[pulse_3s_infinite];
   }
   
-  /* Card update for premium feel */
+  /* Premium card styling */
   .premium-card {
     @apply rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300;
   }
@@ -136,7 +115,7 @@
     @apply h-0.5 w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent my-4 rounded-full;
   }
   
-  /* Floating input style */
+  /* Floating label inputs */
   .floating-input {
     @apply relative;
   }
@@ -150,33 +129,7 @@
     @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition-all pointer-events-none;
   }
   
-  /* Premium dropdown */
-  .dropdown-premium {
-    @apply rounded-full border-gray-200 bg-white focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
-  }
-  
-  /* Button pulse animation */
-  .btn-pulse {
-    @apply relative overflow-hidden;
-  }
-  
-  .btn-pulse::after {
-    @apply content-[''] absolute inset-0 bg-white/20 scale-x-0 opacity-0;
-    animation: pulse 1.5s infinite;
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(0);
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(2);
-      opacity: 0;
-    }
-  }
-  
-  /* Checkmark animation */
+  /* Completion animation */
   @keyframes checkmark {
     0% {
       transform: scale(0);

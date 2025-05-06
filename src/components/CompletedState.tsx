@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Award, RefreshCw, Sparkles } from "lucide-react";
@@ -10,24 +10,24 @@ interface CompletedStateProps {
 }
 
 const CompletedState: React.FC<CompletedStateProps> = ({ onRestart }) => {
-  React.useEffect(() => {
+  useEffect(() => {
     // Trigger confetti when component mounts
-    const duration = 3 * 1000;
+    const duration = 4 * 1000;
     const end = Date.now() + duration;
 
     const runConfetti = () => {
       confetti({
-        particleCount: 2,
+        particleCount: 3,
         angle: 60,
-        spread: 55,
+        spread: 70,
         origin: { x: 0 },
         colors: ['#3b82f6', '#60a5fa', '#8b5cf6', '#a78bfa']
       });
       
       confetti({
-        particleCount: 2,
+        particleCount: 3,
         angle: 120,
-        spread: 55,
+        spread: 70,
         origin: { x: 1 },
         colors: ['#3b82f6', '#60a5fa', '#8b5cf6', '#a78bfa']
       });
@@ -51,9 +51,18 @@ const CompletedState: React.FC<CompletedStateProps> = ({ onRestart }) => {
         className="w-24 h-24 flex items-center justify-center rounded-full bg-green-50 border border-green-100 mb-6"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring" }}
+        transition={{ type: "spring", damping: 10, stiffness: 100 }}
       >
-        <Award className="w-12 h-12 text-green-500" />
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1, rotate: [0, 10, 0] }}
+          transition={{ 
+            scale: { delay: 0.3, type: "spring", damping: 10, stiffness: 100 },
+            rotate: { delay: 0.5, duration: 0.5, ease: "easeInOut" }
+          }}
+        >
+          <Award className="w-12 h-12 text-green-500" />
+        </motion.div>
       </motion.div>
       
       <motion.h3 
@@ -80,24 +89,39 @@ const CompletedState: React.FC<CompletedStateProps> = ({ onRestart }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
-        <Button 
-          onClick={onRestart} 
-          className="w-full bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple hover:opacity-90 text-white shadow-lg py-6 rounded-xl relative overflow-hidden group h-14"
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className="absolute inset-0 w-full h-full bg-white/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-          <span className="relative flex items-center gap-2 text-base">
-            <RefreshCw className="h-5 w-5" />
-            Start a New Curriculum
-          </span>
-        </Button>
+          <Button 
+            onClick={onRestart} 
+            className="w-full bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple hover:opacity-90 text-white shadow-lg py-6 rounded-xl relative overflow-hidden group h-14"
+          >
+            <motion.div 
+              className="absolute inset-0 w-full h-full bg-white/10"
+              initial={{ y: "100%" }}
+              whileHover={{ y: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <span className="relative flex items-center gap-2 text-base">
+              <RefreshCw className="h-5 w-5" />
+              Start a New Curriculum
+            </span>
+          </Button>
+        </motion.div>
         
-        <Button 
-          variant="outline" 
-          className="w-full border-gray-200 py-5 rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <Sparkles className="h-4 w-4 text-custom-blue" />
-          <span>Explore More Topics</span>
-        </Button>
+          <Button 
+            variant="outline" 
+            className="w-full border-gray-200 py-5 rounded-xl hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+          >
+            <Sparkles className="h-4 w-4 text-custom-blue" />
+            <span>Explore More Topics</span>
+          </Button>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

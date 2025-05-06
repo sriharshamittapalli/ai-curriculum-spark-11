@@ -1,6 +1,6 @@
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Brain, BookOpen } from "lucide-react";
 
 const LoadingOverlay: React.FC = () => {
@@ -12,12 +12,24 @@ const LoadingOverlay: React.FC = () => {
     "Tailoring content to your preferences...",
     "Crafting your learning journey...",
   ];
+  
+  const [currentMessage, setCurrentMessage] = useState(0);
+  
+  // Cycle through messages every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessage(prev => (prev + 1) % loadingMessages.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
       className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center"
     >
       <div className="relative">
@@ -95,19 +107,22 @@ const LoadingOverlay: React.FC = () => {
       </motion.div>
       
       <motion.div 
-        className="mt-2 text-sm text-gray-500 max-w-md text-center px-6"
+        className="mt-2 text-sm text-gray-500 max-w-md text-center px-6 h-5"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          key={Math.random()}
-        >
-          {loadingMessages[Math.floor(Math.random() * loadingMessages.length)]}
-        </motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentMessage}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            {loadingMessages[currentMessage]}
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
       
       <motion.div
