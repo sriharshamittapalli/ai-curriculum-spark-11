@@ -92,7 +92,7 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 py-6 px-4 md:px-6 lg:py-8 lg:px-8 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 py-6 px-4 md:px-6 lg:py-8 lg:px-8 overflow-x-hidden">
       <AnimatePresence>
         {isLoading && <LoadingOverlay />}
       </AnimatePresence>
@@ -103,11 +103,11 @@ const Index: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl mx-auto relative">
           {/* Mobile Toggle Button */}
           {isMobile && isGenerated && (
             <motion.div 
-              className="flex justify-center mb-4"
+              className="flex justify-center mb-4 sticky top-0 z-10 bg-white/90 backdrop-blur-sm py-2"
               variants={itemVariants}
               layout
             >
@@ -157,7 +157,7 @@ const Index: React.FC = () => {
           <AnimatePresence mode="wait">
             {(!isMobile || (isMobile && showMobileSettings)) && (
               <motion.div 
-                className="w-full lg:w-2/5"
+                className="w-full lg:w-2/5 lg:sticky lg:top-8 self-start"
                 key="settings"
                 variants={contentVariants}
                 initial="hidden"

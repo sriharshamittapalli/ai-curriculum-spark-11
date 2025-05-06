@@ -42,8 +42,12 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-white text-foreground font-sans;
+    @apply bg-white text-foreground font-sans overflow-x-hidden;
   }
   
   /* Enhanced scrollbar */
@@ -113,15 +117,15 @@
   
   /* Select dropdown styles to fix visibility */
   [data-state=open] [data-radix-select-item] {
-    @apply bg-gray-100 text-gray-800;
+    @apply bg-gray-50 text-gray-800;
   }
   
   [data-radix-select-item]:hover {
-    @apply bg-gray-100 text-gray-800;
+    @apply bg-gray-50 text-gray-800;
   }
   
   [data-radix-select-item]:focus {
-    @apply bg-blue-50 text-blue-600 outline-none;
+    @apply bg-blue-50 text-blue-700 outline-none;
   }
 
   /* Fix for dropdown menu items */
@@ -152,5 +156,41 @@
 
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Fix for making selects and dropdowns visible */
+  .radix-select-viewport,
+  .select-content,
+  [data-radix-select-item] {
+    @apply bg-white text-gray-800;
+  }
+  
+  .radix-select-item[data-highlighted],
+  .select-item[data-highlighted] {
+    @apply bg-blue-50 text-blue-700;
+  }
+  
+  /* Fix for button animations */
+  .btn-animate {
+    @apply relative overflow-hidden;
+  }
+  
+  .btn-animate::after {
+    content: '';
+    @apply absolute inset-0 bg-white/10 transform translate-y-full transition-transform duration-300;
+  }
+  
+  .btn-animate:hover::after {
+    @apply translate-y-0;
+  }
+  
+  /* Sticky headers */
+  .sticky-header {
+    @apply sticky top-0 z-30 bg-white/90 backdrop-blur-sm;
+  }
+  
+  /* Fixed form container */
+  .fixed-form-container {
+    @apply sticky top-0 max-h-screen overflow-auto;
   }
 }
