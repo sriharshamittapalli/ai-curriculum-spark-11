@@ -1,6 +1,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
 const LoadingOverlay: React.FC = () => {
   return (
@@ -27,16 +28,17 @@ const LoadingOverlay: React.FC = () => {
             ease: "easeInOut"
           }}
         >
-          <div className="w-10 h-10 rounded-full bg-custom-light-blue"></div>
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-custom-blue/30 to-custom-purple/30 backdrop-blur-sm"></div>
         </motion.div>
       </div>
       
       <motion.div
-        className="mt-8 text-xl font-medium text-gray-700"
+        className="mt-8 text-xl font-medium text-gray-700 flex items-center gap-2"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
+        <Sparkles className="w-5 h-5 text-custom-blue" />
         Creating your personalized curriculum
       </motion.div>
       
@@ -58,7 +60,7 @@ const LoadingOverlay: React.FC = () => {
         {[0, 1, 2].map((dot) => (
           <motion.div
             key={dot}
-            className="w-2.5 h-2.5 rounded-full bg-custom-blue"
+            className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-custom-blue to-custom-purple"
             animate={{ 
               y: [0, -6, 0],
             }}

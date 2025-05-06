@@ -1,12 +1,12 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
 
 const EmptyState: React.FC = () => {
   return (
     <motion.div 
-      className="flex flex-col items-center justify-center p-12 h-full rounded-3xl border border-gray-100 bg-white"
+      className="flex flex-col items-center justify-center p-12 h-full rounded-3xl border border-gray-100 bg-white/90 backdrop-blur-sm shadow-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -48,7 +48,7 @@ const EmptyState: React.FC = () => {
       </motion.p>
       
       <motion.div
-        className="flex items-center text-custom-blue text-sm font-medium"
+        className="flex items-center text-custom-blue text-sm font-medium cursor-pointer"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4 }}
@@ -56,7 +56,7 @@ const EmptyState: React.FC = () => {
       >
         <Sparkles className="w-4 h-4 mr-2" />
         <span>Configure your learning preferences</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        <ArrowRight className="ml-1 w-4 h-4" />
       </motion.div>
     </motion.div>
   );

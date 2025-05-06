@@ -6,6 +6,7 @@ import ProgressTracker from "./ProgressTracker";
 import EmptyState from "./EmptyState";
 import CompletedState from "./CompletedState";
 import { toast } from "@/components/ui/sonner";
+import { CurriculumDay } from "@/types/curriculum";
 
 const initialCurriculumData: Omit<DayCardProps, 'onMarkComplete'>[] = [
   {
@@ -79,15 +80,23 @@ const initialCurriculumData: Omit<DayCardProps, 'onMarkComplete'>[] = [
   }
 ];
 
-const CurriculumPanel: React.FC = () => {
+interface CurriculumPanelProps {
+  isGenerated?: boolean;
+}
+
+const CurriculumPanel: React.FC<CurriculumPanelProps> = ({ isGenerated = false }) => {
   const [curriculumData, setCurriculumData] = useState(initialCurriculumData);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
   const [hasAnimated, setHasAnimated] = useState(false);
-  const [isGeneratedCurriculum, setIsGeneratedCurriculum] = useState(false);
+  const [isGeneratedCurriculum, setIsGeneratedCurriculum] = useState(isGenerated);
   
   useEffect(() => {
     setHasAnimated(true);
   }, []);
+  
+  useEffect(() => {
+    setIsGeneratedCurriculum(isGenerated);
+  }, [isGenerated]);
   
   useEffect(() => {
     // Check if all days are completed

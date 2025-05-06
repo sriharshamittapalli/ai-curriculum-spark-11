@@ -3,14 +3,9 @@ import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Check, Video, BookOpen, FileText, CheckCircle } from "lucide-react";
-
-interface Resource {
-  title: string;
-  url: string;
-  type: string;
-}
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, Video, BookOpen, FileText, CheckCircle, ArrowUpRight } from "lucide-react";
+import { Resource } from "@/types/curriculum";
 
 export interface DayCardProps {
   dayNumber: number;
@@ -106,7 +101,7 @@ const DayCard: React.FC<DayCardProps> = ({
       onHoverEnd={() => setIsHovering(false)}
     >
       <Card className={`premium-card overflow-hidden ${
-        completed ? "ring-1 ring-custom-blue/10 shadow-md" : ""
+        completed ? "ring-1 ring-custom-blue/20 shadow-lg border-custom-blue/10" : "border-gray-200 shadow"
       }`}>
         <CardHeader className="p-6 pb-3">
           <div className="flex items-start justify-between">
@@ -129,7 +124,7 @@ const DayCard: React.FC<DayCardProps> = ({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ type: "spring" }}
               >
-                <Badge variant="outline" className="badge-completed flex items-center gap-1 font-medium">
+                <Badge variant="outline" className="badge-completed flex items-center gap-1 font-medium text-green-600 border-green-200 bg-green-50">
                   <CheckCircle className="h-3 w-3" />
                   Completed
                 </Badge>
@@ -161,7 +156,7 @@ const DayCard: React.FC<DayCardProps> = ({
             </ul>
           </div>
           
-          <div className="gradient-divider"></div>
+          <div className="h-px bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100"></div>
           
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
@@ -187,7 +182,7 @@ const DayCard: React.FC<DayCardProps> = ({
                       {resource.title}
                     </a>
                     <div className="text-gray-400 hover:text-gray-700 transition-colors cursor-pointer">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+                      <ArrowUpRight className="h-4 w-4" />
                     </div>
                   </div>
                 </motion.li>
@@ -195,7 +190,7 @@ const DayCard: React.FC<DayCardProps> = ({
             </ul>
           </div>
           
-          <div className="gradient-divider"></div>
+          <div className="h-px bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100"></div>
           
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
@@ -221,18 +216,36 @@ const DayCard: React.FC<DayCardProps> = ({
               : "w-full bg-gradient-to-r from-custom-blue to-custom-light-blue hover:opacity-90 text-white shadow-md hover:shadow-lg rounded-xl py-5 group"
             }
           >
-            {isCheckmarkAnimating && !completed ? (
-              <span className="animate-checkmark">
-                <CheckCircle className="h-5 w-5 mx-auto" />
-              </span>
-            ) : completed ? (
-              <span className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4" />
-                Completed
-              </span>
-            ) : (
-              <span className="group-hover:scale-105 transition-transform">Mark as Complete</span>
-            )}
+            <AnimatePresence mode="wait">
+              {isCheckmarkAnimating && !completed ? (
+                <motion.span 
+                  key="checking"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1.2 }}
+                  exit={{ scale: 0 }}
+                  className="flex items-center justify-center"
+                >
+                  <CheckCircle className="h-5 w-5 mx-auto" />
+                </motion.span>
+              ) : completed ? (
+                <motion.span 
+                  key="completed"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex items-center gap-2"
+                >
+                  <CheckCircle className="h-4 w-4" />
+                  Completed
+                </motion.span>
+              ) : (
+                <motion.span 
+                  key="mark-complete"
+                  className="group-hover:scale-105 transition-transform"
+                >
+                  Mark as Complete
+                </motion.span>
+              )}
+            </AnimatePresence>
             
             {!completed && (
               <span className="absolute inset-0 rounded-xl overflow-hidden">

@@ -5,6 +5,17 @@ import CurriculumPanel from "@/components/CurriculumPanel";
 import { toast } from "@/components/ui/sonner";
 import { motion } from "framer-motion";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { z } from "zod";
+
+// Define the form schema
+const formSchema = z.object({
+  topic: z.string(),
+  learningPace: z.string(),
+  preferredStyles: z.array(z.string()),
+  learningDepth: z.enum(["beginner", "intermediate", "advanced"]),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const Index: React.FC = () => {
   const [curriculumGenerated, setCurriculumGenerated] = useState(false);
@@ -26,8 +37,11 @@ const Index: React.FC = () => {
     };
   }, []);
 
-  const handleGenerateCurriculum = () => {
+  const handleGenerateCurriculum = (formValues: FormValues) => {
     setIsLoading(true);
+    
+    // Log the form values
+    console.log("Form values:", formValues);
     
     // Simulate API call
     setTimeout(() => {
@@ -134,7 +148,16 @@ const Index: React.FC = () => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             <button 
-              onClick={handleGenerateCurriculum}
+              onClick={() => {
+                // This is just for mobile view demo purposes
+                setIsLoading(true);
+                setTimeout(() => {
+                  toast.success("Curriculum generated successfully!");
+                  setCurriculumGenerated(true);
+                  setIsLoading(false);
+                  setShowMobileSettings(false);
+                }, 2500);
+              }}
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple hover:opacity-90 text-white shadow-lg py-4 rounded-xl relative overflow-hidden flex items-center justify-center gap-2"
             >
