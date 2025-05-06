@@ -79,6 +79,11 @@ const initialCurriculumData: Omit<DayCardProps, 'onMarkComplete'>[] = [
 const CurriculumPanel: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState(initialCurriculumData);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  
+  useEffect(() => {
+    setHasAnimated(true);
+  }, []);
   
   const handleMarkComplete = (dayNumber: number) => {
     // Update the completed status of the day
@@ -107,34 +112,54 @@ const CurriculumPanel: React.FC = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15
+        staggerChildren: 0.15,
+        delayChildren: 0.25
       }
     }
   };
   
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+  
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
   
   return (
-    <div className="h-full flex flex-col">
-      <div className="glass-card p-6 mb-4 border border-white/10">
-        <h2 className="text-2xl font-semibold mb-2 text-white">Your Personalized Curriculum</h2>
-        <p className="text-sm text-white/70">Machine Learning for Beginners - 3 day curriculum</p>
-      </div>
+    <div className="h-full flex flex-col relative">
+      <motion.div 
+        className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl mb-6"
+        variants={headerVariants}
+        initial="hidden"
+        animate="show"
+      >
+        <h2 className="text-2xl font-bold mb-1 text-gray-800 flex items-center gap-2">
+          Your Personalized Curriculum
+          <span className="inline-block w-1.5 h-1.5 bg-custom-blue rounded-full animate-pulse"></span>
+        </h2>
+        <div className="flex items-center">
+          <span className="text-sm text-gray-500">Machine Learning for Beginners - 3 day curriculum</span>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400"></span>
+            <span className="text-xs font-medium text-gray-700">Active</span>
+          </div>
+        </div>
+      </motion.div>
       
       <ProgressTracker totalDays={curriculumData.length} completedDays={completedDays} />
       
       <motion.div 
-        className="flex-grow overflow-auto scrollbar-hide pr-2"
+        className="flex-grow overflow-auto pr-2 pb-4 scrollbar-hide scroll-smooth snap-y snap-mandatory"
         variants={containerVariants}
         initial="hidden"
         animate="show"
       >
-        <div className="space-y-4">
+        <div className="space-y-6">
           {curriculumData.map((day) => (
-            <motion.div key={day.dayNumber} variants={itemVariants}>
+            <motion.div key={day.dayNumber} variants={itemVariants} className="snap-start">
               <DayCard 
                 {...day}
                 onMarkComplete={handleMarkComplete}

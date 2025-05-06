@@ -7,14 +7,14 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    --card: 222 47% 11%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 98%;
@@ -35,7 +35,7 @@
     --input: 217 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 
   * {
@@ -43,13 +43,13 @@
   }
 
   body {
-    @apply bg-custom-darker-blue text-foreground font-sans;
+    @apply bg-white text-foreground font-sans;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-opacity-20 backdrop-filter backdrop-blur-sm bg-custom-dark-blue border border-white/10 rounded-lg shadow-lg;
+    @apply bg-opacity-95 backdrop-filter backdrop-blur-sm bg-white border border-white/20 rounded-2xl shadow-lg;
   }
   
   .blue-gradient-bg {
@@ -72,7 +72,7 @@
 
   /* Interactive card styles */
   .interactive-card {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-custom-blue/10 hover:border-custom-blue/30;
+    @apply transition-all duration-300 hover:shadow-lg hover:border-custom-blue/30;
   }
   
   /* Soft hover effects */
@@ -82,16 +82,31 @@
 
   /* Enhanced form elements */
   .form-input-enhanced {
-    @apply glass-card border-custom-blue/20 focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
+    @apply bg-white/95 border-gray-200 focus:border-custom-blue/50 focus:ring focus:ring-custom-blue/20;
   }
   
   /* Badge styles */
   .badge-premium {
-    @apply bg-gradient-to-r from-custom-blue/20 to-custom-purple/20 text-white border border-white/10;
+    @apply bg-gradient-to-r from-custom-blue/20 to-custom-purple/20 text-custom-blue border border-custom-blue/10;
   }
   
   /* Text gradient */
   .text-gradient {
     @apply bg-gradient-to-r from-custom-light-blue to-custom-purple bg-clip-text text-transparent;
   }
+
+  /* Glassmorphism */
+  .glass-morphism {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
+  }
+
+  /* Animations */
+  .hover-lift {
+    @apply transition-transform hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .pulse-slow {
+    @apply animate-[pulse_3s_infinite];
+  }
 }
+
