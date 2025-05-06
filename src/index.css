@@ -95,16 +95,6 @@
     @apply transition-all duration-300 hover:shadow-lg hover:border-custom-blue/30;
   }
   
-  /* Hover effect for elements */
-  .hover-lift {
-    @apply transition-transform hover:-translate-y-1 hover:shadow-lg;
-  }
-
-  /* Slow pulse animation */
-  .pulse-slow {
-    @apply animate-[pulse_3s_infinite];
-  }
-  
   /* Premium card styling */
   .premium-card {
     @apply rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300;
@@ -129,23 +119,6 @@
     @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 transition-all pointer-events-none;
   }
   
-  /* Completion animation */
-  @keyframes checkmark {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  .animate-checkmark {
-    animation: checkmark 0.5s ease-in-out forwards;
-  }
-  
   /* Completion badge */
   .badge-completed {
     @apply bg-green-50 text-green-600 border-green-100;
@@ -161,15 +134,5 @@
       opacity: 1;
       transform: translateX(0);
     }
-  }
-  
-  /* Progress animation */
-  @keyframes progressFill {
-    from { transform: translateX(-100%); }
-    to { transform: translateX(calc(-100% + var(--progress-width))); }
-  }
-  
-  .animate-progress {
-    animation: progressFill 0.6s ease-out forwards;
   }
 }

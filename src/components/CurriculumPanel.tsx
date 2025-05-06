@@ -32,20 +32,20 @@ const CurriculumPanel: React.FC<CurriculumPanelProps> = ({
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.25
+        staggerChildren: 0.1,
+        delayChildren: 0.2
       }
     }
   };
   
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
   
   const headerVariants = {
     hidden: { opacity: 0, y: -20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
   
   // If no curriculum is generated yet
@@ -65,6 +65,7 @@ const CurriculumPanel: React.FC<CurriculumPanelProps> = ({
         variants={headerVariants}
         initial="hidden"
         animate="show"
+        layout
       >
         <h2 className="text-2xl font-bold mb-1 text-gray-800 flex items-center gap-2">
           Your Personalized Curriculum
@@ -81,17 +82,22 @@ const CurriculumPanel: React.FC<CurriculumPanelProps> = ({
         </div>
       </motion.div>
       
-      <ProgressTracker totalDays={curriculumData.length} completedDays={completedDays} />
+      {curriculumData.length > 0 && <ProgressTracker totalDays={curriculumData.length} completedDays={completedDays} />}
       
       <motion.div 
         className="flex-grow overflow-auto pr-2 pb-4 scrollbar-hide scroll-smooth snap-y snap-mandatory"
         variants={containerVariants}
         initial="hidden"
         animate="show"
+        layout
       >
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {curriculumData.length > 0 ? (
-            <div className="space-y-6">
+            <motion.div 
+              className="space-y-6"
+              layout
+              key="curriculum-list"
+            >
               {curriculumData.map((day) => (
                 <motion.div 
                   key={day.dayNumber} 
@@ -105,9 +111,10 @@ const CurriculumPanel: React.FC<CurriculumPanelProps> = ({
                   />
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           ) : (
             <motion.div
+              key="empty-curriculum"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

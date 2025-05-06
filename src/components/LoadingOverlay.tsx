@@ -15,7 +15,7 @@ const LoadingOverlay: React.FC = () => {
   
   const [currentMessage, setCurrentMessage] = useState(0);
   
-  // Cycle through messages every 3 seconds
+  // Cycle through messages
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentMessage(prev => (prev + 1) % loadingMessages.length);
@@ -29,14 +29,14 @@ const LoadingOverlay: React.FC = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
       className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center"
     >
       <div className="relative">
         {/* Main spinner */}
         <motion.div
           animate={{ 
-            rotate: 360,
+            rotate: 360
           }}
           transition={{
             duration: 3,
@@ -52,7 +52,7 @@ const LoadingOverlay: React.FC = () => {
               stroke="currentColor" 
               strokeWidth="8" 
               strokeLinecap="round" 
-              strokeDasharray="62.83185307179586 188.49555921538757"
+              strokeDasharray="62.83 188.5"
               className="opacity-25"
             />
             <circle 
@@ -62,7 +62,7 @@ const LoadingOverlay: React.FC = () => {
               stroke="currentColor" 
               strokeWidth="8" 
               strokeLinecap="round" 
-              strokeDasharray="62.83185307179586 188.49555921538757"
+              strokeDasharray="62.83 188.5"
               className="opacity-75"
               strokeDashoffset="25"
             />
@@ -73,7 +73,7 @@ const LoadingOverlay: React.FC = () => {
         <motion.div 
           className="absolute inset-0 flex items-center justify-center"
           animate={{ 
-            scale: [1, 1.1, 1],
+            scale: [1, 1.1, 1]
           }}
           transition={{
             duration: 2,
@@ -81,18 +81,7 @@ const LoadingOverlay: React.FC = () => {
             ease: "easeInOut"
           }}
         >
-          <motion.div
-            animate={{ 
-              rotate: [0, 5, -5, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Brain className="w-8 h-8 text-custom-light-blue" />
-          </motion.div>
+          <Brain className="w-8 h-8 text-custom-light-blue" />
         </motion.div>
       </div>
       
@@ -100,7 +89,7 @@ const LoadingOverlay: React.FC = () => {
         className="mt-8 text-xl font-medium text-gray-700 flex items-center gap-2"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
         <Sparkles className="w-5 h-5 text-custom-blue" />
         Creating your personalized curriculum
@@ -108,9 +97,8 @@ const LoadingOverlay: React.FC = () => {
       
       <motion.div 
         className="mt-2 text-sm text-gray-500 max-w-md text-center px-6 h-5"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -129,7 +117,7 @@ const LoadingOverlay: React.FC = () => {
         className="mt-6 flex items-center gap-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
+        transition={{ delay: 0.3 }}
       >
         {/* Book icons that move up and down */}
         <motion.div className="flex space-x-1.5">
@@ -137,7 +125,7 @@ const LoadingOverlay: React.FC = () => {
             <motion.div
               key={dot}
               animate={{ 
-                y: [0, -6, 0],
+                y: [0, -6, 0]
               }}
               transition={{
                 duration: 0.6,

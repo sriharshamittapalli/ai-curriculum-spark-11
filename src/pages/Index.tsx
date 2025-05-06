@@ -54,8 +54,8 @@ const Index: React.FC = () => {
     visible: { 
       opacity: 1,
       transition: { 
-        duration: 0.7,
-        staggerChildren: 0.2
+        duration: 0.5,
+        staggerChildren: 0.1
       }
     }
   };
@@ -66,12 +66,12 @@ const Index: React.FC = () => {
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.4 }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 py-8 px-4 md:px-8 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 py-6 px-4 md:px-6 lg:py-8 lg:px-8 overflow-hidden relative">
       <AnimatePresence>
         {isLoading && <LoadingOverlay />}
       </AnimatePresence>
@@ -82,29 +82,49 @@ const Index: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl mx-auto">
           {/* Mobile Toggle Button */}
           {isMobile && isGenerated && (
             <motion.div 
               className="flex justify-center mb-4"
               variants={itemVariants}
+              layout
             >
-              <div className="bg-white rounded-full shadow-md p-1 inline-flex border border-gray-100">
+              <motion.div 
+                className="bg-white rounded-full shadow-md p-1 inline-flex border border-gray-100"
+                layout
+              >
                 <motion.button 
-                  className={`px-4 py-2 text-sm rounded-full transition-all ${showMobileSettings ? 'bg-custom-blue text-white' : 'text-gray-500'}`}
+                  className={`px-4 py-2 text-sm rounded-full transition-all relative ${showMobileSettings ? 'text-white' : 'text-gray-500'}`}
                   onClick={() => setShowMobileSettings(true)}
                   whileTap={{ scale: 0.95 }}
+                  layout
                 >
-                  Settings
+                  {showMobileSettings && (
+                    <motion.div
+                      className="absolute inset-0 bg-custom-blue rounded-full"
+                      layoutId="activeMobileTab"
+                      transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+                    />
+                  )}
+                  <span className="relative z-10">Settings</span>
                 </motion.button>
                 <motion.button 
-                  className={`px-4 py-2 text-sm rounded-full transition-all ${!showMobileSettings ? 'bg-custom-blue text-white' : 'text-gray-500'}`}
+                  className={`px-4 py-2 text-sm rounded-full transition-all relative ${!showMobileSettings ? 'text-white' : 'text-gray-500'}`}
                   onClick={() => setShowMobileSettings(false)}
                   whileTap={{ scale: 0.95 }}
+                  layout
                 >
-                  Curriculum
+                  {!showMobileSettings && (
+                    <motion.div
+                      className="absolute inset-0 bg-custom-blue rounded-full"
+                      layoutId="activeMobileTab"
+                      transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+                    />
+                  )}
+                  <span className="relative z-10">Curriculum</span>
                 </motion.button>
-              </div>
+              </motion.div>
             </motion.div>
           )}
           
@@ -115,9 +135,9 @@ const Index: React.FC = () => {
                 className="w-full lg:w-2/5"
                 variants={itemVariants}
                 key="settings"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -20, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 transition={{ duration: 0.3 }}
                 layout
               >
@@ -133,10 +153,10 @@ const Index: React.FC = () => {
                 className="w-full lg:w-3/5"
                 variants={itemVariants}
                 key="curriculum"
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 20, opacity: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                transition={{ duration: 0.3 }}
                 layout
               >
                 <CurriculumPanel 
@@ -154,7 +174,7 @@ const Index: React.FC = () => {
         
         {/* Footer */}
         <motion.div 
-          className="mt-12 text-center text-gray-400 text-sm flex flex-col md:flex-row justify-center items-center gap-4"
+          className="mt-10 text-center text-gray-400 text-sm flex flex-col md:flex-row justify-center items-center gap-4"
           variants={itemVariants}
         >
           <p>AI Curriculum Builder — Personalized learning paths created just for you.</p>

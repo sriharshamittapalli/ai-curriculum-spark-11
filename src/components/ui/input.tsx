@@ -13,23 +13,31 @@ const inputVariants = cva(
         pill: "rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200",
         ghost: "border-none bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
       },
+      state: {
+        default: "border-input",
+        error: "border-destructive focus-visible:ring-destructive",
+        success: "border-green-500 focus-visible:ring-green-500",
+      }
     },
     defaultVariants: {
       variant: "default",
+      state: "default",
     },
   }
 )
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {}
+    VariantProps<typeof inputVariants> {
+    state?: "default" | "error" | "success";
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, variant, ...props }, ref) => {
+  ({ className, type, variant, state, ...props }, ref) => {
     return (
       <input
         type={type}
-        className={cn(inputVariants({ variant, className }))}
+        className={cn(inputVariants({ variant, state, className }))}
         ref={ref}
         {...props}
       />

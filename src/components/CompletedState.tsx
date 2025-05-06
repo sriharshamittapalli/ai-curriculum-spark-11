@@ -10,48 +10,68 @@ interface CompletedStateProps {
 }
 
 const CompletedState: React.FC<CompletedStateProps> = ({ onRestart }) => {
-  useEffect(() => {
-    // Trigger confetti when component mounts
-    const duration = 4 * 1000;
-    const end = Date.now() + duration;
+  // Container variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        staggerChildren: 0.2
+      }
+    }
+  };
+  
+  // Item variants
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
 
-    const runConfetti = () => {
+  useEffect(() => {
+    // Trigger confetti with better performance settings
+    const launchConfetti = () => {
+      const duration = 2000;
+      const end = Date.now() + duration;
+      
+      const colors = ['#3b82f6', '#60a5fa', '#8b5cf6', '#a78bfa'];
+      
+      // Do moderate confetti burst instead of continuous
       confetti({
-        particleCount: 3,
-        angle: 60,
+        particleCount: 100,
         spread: 70,
-        origin: { x: 0 },
-        colors: ['#3b82f6', '#60a5fa', '#8b5cf6', '#a78bfa']
+        origin: { y: 0.6 },
+        colors
       });
       
-      confetti({
-        particleCount: 3,
-        angle: 120,
-        spread: 70,
-        origin: { x: 1 },
-        colors: ['#3b82f6', '#60a5fa', '#8b5cf6', '#a78bfa']
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(runConfetti);
-      }
+      // Add another burst after short delay
+      setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          spread: 100,
+          origin: { y: 0.6 },
+          colors
+        });
+      }, 500);
     };
 
-    runConfetti();
+    launchConfetti();
   }, []);
 
   return (
     <motion.div 
       className="flex flex-col items-center justify-center p-12 h-full rounded-3xl border border-gray-100 bg-white shadow-md"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
     >
       <motion.div 
         className="w-24 h-24 flex items-center justify-center rounded-full bg-green-50 border border-green-100 mb-6"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", damping: 10, stiffness: 100 }}
+        variants={itemVariants}
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -66,28 +86,22 @@ const CompletedState: React.FC<CompletedStateProps> = ({ onRestart }) => {
       </motion.div>
       
       <motion.h3 
+        variants={itemVariants}
         className="text-2xl font-bold text-gray-800 mb-3 text-center"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
       >
         🎉 Congratulations!
       </motion.h3>
       
       <motion.p 
+        variants={itemVariants}
         className="text-gray-500 text-center max-w-sm mb-8"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
       >
         You've completed your entire curriculum. Ready to explore more learning paths?
       </motion.p>
       
       <motion.div
+        variants={itemVariants}
         className="space-y-3 w-full max-w-xs"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4 }}
       >
         <motion.div
           whileHover={{ scale: 1.02 }}

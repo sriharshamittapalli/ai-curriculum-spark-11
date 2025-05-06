@@ -14,9 +14,10 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
   completedDays 
 }) => {
   const [displayProgress, setDisplayProgress] = useState(0);
-  const progress = Math.round((completedDays.length / totalDays) * 100);
+  const progress = totalDays > 0 ? Math.round((completedDays.length / totalDays) * 100) : 0;
   
   useEffect(() => {
+    // Use a small timeout for smoother animation
     const timer = setTimeout(() => {
       setDisplayProgress(progress);
     }, 300);
@@ -24,12 +25,17 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
     return () => clearTimeout(timer);
   }, [progress]);
   
+  if (totalDays === 0) {
+    return null;
+  }
+  
   return (
     <motion.div 
       className="bg-white rounded-3xl p-6 mb-8 border border-gray-100 shadow-md overflow-hidden relative"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
+      layout
     >
       <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-70"></div>
       
@@ -75,9 +81,6 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         <Progress 
           value={displayProgress} 
           className="h-3 rounded-full bg-gray-100 overflow-hidden"
-          style={{
-            "--progress-width": `${displayProgress}%`
-          } as React.CSSProperties}
         >
           <motion.div 
             className="h-full rounded-full bg-gradient-to-r from-custom-blue via-custom-light-blue to-custom-purple"
@@ -126,7 +129,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
               whileHover={{ scale: 1.1 }}
               initial={false}
               animate={isDone ? { y: [0, -3, 0] } : {}}
-              transition={isDone ? { duration: 0.3, delay: i * 0.1 } : {}}
+              transition={isDone ? { duration: 0.3, delay: i * 0.05 } : {}}
             >
               <div 
                 className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -143,7 +146,9 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                   >
                     <CheckCircle className="h-4 w-4" />
                   </motion.div>
-                ) : i + 1}
+                ) : (
+                  <span>{i + 1}</span>
+                )}
               </div>
               <div className="text-xs mt-1.5 font-medium text-gray-600">Day {i + 1}</div>
             </motion.div>
